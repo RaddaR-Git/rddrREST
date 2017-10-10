@@ -1,0 +1,28 @@
+{
+  "name": "RaddarREST",
+  "version": "1.0.0",
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "OSCAR.AVILAPER",
+  "contributors": [],
+  "dependencies": {
+    "body-parser": "1.17.2",
+    "crypto": "1.0.1",
+    "email-validator": "^1.1.1",
+    "express": "^4.15.4",
+    "express-ws": "3.0.0",
+    "log4js": "2.3.3",
+    "multer": "1.3.0",
+    "mysql": "2.14.1",
+    "nodemailer": "^4.0.1",
+    "socket.io": "2.0.3"
+  },
+  "scripts": {
+    "start": "node main.js"
+  }
+}
