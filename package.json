@@ -1,15 +1,7 @@
 {
   "name": "RaddarREST",
-  "version": "1.0.0",
-  "keywords": [
-    "util",
-    "functional",
-    "server",
-    "client",
-    "browser"
-  ],
+  "main": "main.js",
   "author": "OSCAR.AVILAPER",
-  "contributors": [],
   "dependencies": {
     "body-parser": "1.17.2",
     "crypto": "1.0.1",
