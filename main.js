@@ -793,34 +793,31 @@ var versusKey = 'YAsiEsComoSalveALaNavidad';
 
 
 
-//<editor-fold defaultstate="collapsed" desc="DEFAULT">
- app.get('/', function (req, res) {
-     
-     var debug=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L1_debug_appender.log";
-     var info=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L2_info_appender.log";
-     var warn=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L3_warn_appender.log";
-     var error=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L4_error_appender.log";
-     var fatal=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L5_fatal_appender.log";
-     
-     var text=" RaddaR Servicio iniciado";
-     text=text+"<br>";
-     text=text+"<a href='"+debug+"'>"+debug+"</a>";
-     text=text+"<br>";
-     text=text+"<a href='"+info+"'>"+info+"</a>";
-     text=text+"<br>";
-     text=text+"<a href='"+warn+"'>"+warn+"</a>";
-     text=text+"<br>";
-     text=text+"<a href='"+error+"'>"+error+"</a>";
-     text=text+"<br>";
-     text=text+"<a href='"+fatal+"'>"+fatal+"</a>";
-     
+//<editor-fold defaultstate="collapsed" desc="default">
+app.get('/', function (req, res) {
+
+    var debug = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L1_debug_appender.log";
+    var info = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L2_info_appender.log";
+    var warn = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L3_warn_appender.log";
+    var error = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L4_error_appender.log";
+    var fatal = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L5_fatal_appender.log";
+
+    var text = " RaddaR REST Servicio iniciado";
+    text = text + "<br>";
+    text = text + "<a href='" + debug + "'>" + debug + "</a>";
+    text = text + "<br>";
+    text = text + "<a href='" + info + "'>" + info + "</a>";
+    text = text + "<br>";
+    text = text + "<a href='" + warn + "'>" + warn + "</a>";
+    text = text + "<br>";
+    text = text + "<a href='" + error + "'>" + error + "</a>";
+    text = text + "<br>";
+    text = text + "<a href='" + fatal + "'>" + fatal + "</a>";
+
     res.send(text);
 
-    
 });
 //</editor-fold>
-
-
 
 
 
