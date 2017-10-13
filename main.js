@@ -2387,7 +2387,8 @@ app.post('/getAllTagsFromCredentialTagGroup', function (req, res) {
                             {
                                 idTagGroup: currentRow.id_tag_group,
                                 idCredential: currentRow.id_credential,
-                                tag: currentRow.tag
+                                tag: currentRow.tag,
+                                selected: currentRow.selected
                             }
                     );
                 }
