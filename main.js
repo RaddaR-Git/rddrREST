@@ -792,6 +792,38 @@ var versusKey = 'YAsiEsComoSalveALaNavidad';
 //</editor-fold>
 
 
+
+//<editor-fold defaultstate="collapsed" desc="DEFAULT">
+ app.get('/', function (req, res) {
+     
+     var debug=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L1_debug_appender.log";
+     var info=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L2_info_appender.log";
+     var warn=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L3_warn_appender.log";
+     var error=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L4_error_appender.log";
+     var fatal=req.protocol + '://' + req.get('host')+ replaceAll(mn.logsRute(),"Nest","")  + "L5_fatal_appender.log";
+     
+     var text=" RaddaR Servicio iniciado";
+     text=text+"<br>";
+     text=text+"<a href='"+debug+"'>"+debug+"</a>";
+     text=text+"<br>";
+     text=text+"<a href='"+info+"'>"+info+"</a>";
+     text=text+"<br>";
+     text=text+"<a href='"+warn+"'>"+warn+"</a>";
+     text=text+"<br>";
+     text=text+"<a href='"+error+"'>"+error+"</a>";
+     text=text+"<br>";
+     text=text+"<a href='"+fatal+"'>"+fatal+"</a>";
+     
+    res.send(text);
+
+    
+});
+//</editor-fold>
+
+
+
+
+
 //<editor-fold defaultstate="collapsed" desc="trunOff">
 app.post('/trunOff', function (req, res) {
     var requestID = new Date().getTime();
@@ -2857,43 +2889,6 @@ app.post('/updateTagGroup', function (req, res) {
 
 
 
-//<editor-fold defaultstate="collapsed" desc="alive">
-app.post('/alive', function (req, res) {
-    var requestID = new Date().getTime();
-    var response = {};
-    var dataPacket = {
-        requestID: requestID
-    };
-    mn.init(dataPacket)
-            .then(function (dp) {
-                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/alive]');
-                return dp;
-            })
-            .then(function (dp) {
-                inputValidation(response, req.body, [
-                ]);
-                return dp;
-            })
-            .then(function (dp) {
-                response.dirname = __dirname;
-                response.debug = mn.logsRute() + "L1_debug_appender.log";
-                response.info = mn.logsRute() + "L2_info_appender.log";
-                response.warn = mn.logsRute() + "L3_warn_appender.log";
-                response.error = mn.logsRute() + "L4_error_appender.log";
-                response.fatal = mn.logsRute() + "L5_fatal_appender.log";
-                return dp;
-            })
-            .then(function (dp) {
-                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/alive]');
-                res.json(response);
-            })
-            .catch(function (err) {
-                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/alive]');
-                response.error = err.message;
-                res.json(response);
-            });
-});
-//</editor-fold>
 
 
 
