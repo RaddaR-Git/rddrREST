@@ -747,6 +747,10 @@ var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
+//app.use(express.static(__dirname + '/public'))//for file satatic service express;
+app.use(express.static('Images'))
+app.use(express.static('Nest'))
+
 var validator = require("email-validator");
 
 var mn = new ENCManagerNest();
@@ -2733,7 +2737,48 @@ app.post('/updateTagGroup', function (req, res) {
 
 
 
-//var port = process.env.port || 3000;
+
+
+
+//<editor-fold defaultstate="collapsed" desc="getCurrentLogDirs">
+app.post('/getCurrentLogDirs', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getCurrentLogDirs]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                ]);
+                return dp;
+            })
+            .then(function (dp) {
+                response.debug=mn.logsRute()+"L1_debug_appender.log";
+                response.info=mn.logsRute()+"L2_info_appender.log";
+                response.warn=mn.logsRute()+"L3_warn_appender.log";
+                response.error=mn.logsRute()+"L4_error_appender.log";
+                response.fatal=mn.logsRute()+"L5_fatal_appender.log";
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/getCurrentLogDirs]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/getCurrentLogDirs]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+
 app.set('port', (process.env.PORT || 3000));
 var server = app.listen(app.get('port'), function () {
     mc.info('[RADDAR]-[BACKEND]-[WEBSERVICES] init on port:['+app.get('port')+']');
