@@ -458,7 +458,7 @@ class ENCManagerNest extends ENCPrimal {
         this.nestExecution = new Date();
     }
     nestRute() {
-        return  'Nest/';
+        return  __dirname + "/" + 'Nest/';
     }
     currentExecutionRute() {
         return  'Nest/Execution-' +
@@ -748,8 +748,8 @@ var upload = multer(); // for parsing multipart/form-data
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 //app.use(express.static(__dirname + '/public'))//for file satatic service express;
-app.use(express.static('Images'))
-app.use(express.static('Nest'))
+app.use(express.static('Images'))//for file satatic service express;
+app.use(express.static('Nest'))//for file satatic service express;
 
 var validator = require("email-validator");
 
@@ -772,7 +772,7 @@ var connectionParameters1 = {
     password: 'Enclavesesta',
     secure: false,
     database: 'radar_enc'
-}; 
+};
 
 var mailParameters1 = {
     host: 'a2plcpnl0014.prod.iad2.secureserver.net',
@@ -1894,6 +1894,18 @@ app.post('/setSelectedTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
+                dp.dml = " UPDATE enc_rdr_tags SET selected=0 WHERE id_credential=" + dp.idCredential + "  ";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                dp.dml = " UPDATE enc_rdr_tags SET selected=1 WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
                 mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/setSelectedTagGroup]');
                 res.json(response);
             })
@@ -1904,6 +1916,111 @@ app.post('/setSelectedTagGroup', function (req, res) {
             });
 });
 //</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="setSelectedIndividualTag">
+app.post('/setSelectedIndividualTag', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/setSelectedIndividualTag]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('idTagGroup', ENC.NUMBER()),
+                    new FieldValidation('tag', ENC.STRING()),
+                    new FieldValidation('selected', ENC.BOLEAN())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.idTagGroup = req.body.idTagGroup;
+                dp.tag = req.body.tag;
+                dp.selected = req.body.selected;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.selected !== 1) {
+                        throw new Error("No se puede seleccionar Etiqueta de un Grupo de Etiquetas no seleccionado.");
+                    }
+                } else {
+                    throw new Error("La TagGroup no existe.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                if (dp.selected) {
+                    dp.dml = " UPDATE enc_rdr_tags SET selected=1 WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " and tag='" + dp.tag + "' ";
+                } else {
+                    dp.dml = " UPDATE enc_rdr_tags SET selected=0 WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " and tag='" + dp.tag + "' ";
+                }
+
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                if (dp.hasOwnProperty('resultDML')) {
+                    if (dp.resultDML.hasOwnProperty('affectedRows')) {
+                        response.updated = true;
+                    } else {
+                        throw new Error("No se pudo determinar como seleccionada la etiqueta.");
+                    }
+                } else {
+                    throw new Error("No se pudo  determinar como seleccionada la etiqueta.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/setSelectedIndividualTag]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/setSelectedIndividualTag]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
 
 
 //<editor-fold defaultstate="collapsed" desc="getAllTagGroupFromCredential">
@@ -2052,7 +2169,7 @@ app.post('/createTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " INSERT INTO enc_rdr_tags (id_tag_group, id_credential,tag) values( " + dp.idTagGroup + ", " + dp.idCredential + ", '" + dp.tag + "')";
+                dp.dml = " INSERT INTO enc_rdr_tags (id_tag_group, id_credential,tag,selected) values( " + dp.idTagGroup + ", " + dp.idCredential + ", '" + dp.tag + "',0)";
                 dp.looked = 1;
                 return dp;
             })
@@ -2740,8 +2857,8 @@ app.post('/updateTagGroup', function (req, res) {
 
 
 
-//<editor-fold defaultstate="collapsed" desc="getCurrentLogDirs">
-app.post('/getCurrentLogDirs', function (req, res) {
+//<editor-fold defaultstate="collapsed" desc="alive">
+app.post('/alive', function (req, res) {
     var requestID = new Date().getTime();
     var response = {};
     var dataPacket = {
@@ -2749,7 +2866,7 @@ app.post('/getCurrentLogDirs', function (req, res) {
     };
     mn.init(dataPacket)
             .then(function (dp) {
-                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getCurrentLogDirs]');
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/alive]');
                 return dp;
             })
             .then(function (dp) {
@@ -2758,19 +2875,20 @@ app.post('/getCurrentLogDirs', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                response.debug=mn.logsRute()+"L1_debug_appender.log";
-                response.info=mn.logsRute()+"L2_info_appender.log";
-                response.warn=mn.logsRute()+"L3_warn_appender.log";
-                response.error=mn.logsRute()+"L4_error_appender.log";
-                response.fatal=mn.logsRute()+"L5_fatal_appender.log";
+                response.dirname = __dirname;
+                response.debug = mn.logsRute() + "L1_debug_appender.log";
+                response.info = mn.logsRute() + "L2_info_appender.log";
+                response.warn = mn.logsRute() + "L3_warn_appender.log";
+                response.error = mn.logsRute() + "L4_error_appender.log";
+                response.fatal = mn.logsRute() + "L5_fatal_appender.log";
                 return dp;
             })
             .then(function (dp) {
-                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/getCurrentLogDirs]');
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/alive]');
                 res.json(response);
             })
             .catch(function (err) {
-                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/getCurrentLogDirs]');
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/alive]');
                 response.error = err.message;
                 res.json(response);
             });
@@ -2781,6 +2899,6 @@ app.post('/getCurrentLogDirs', function (req, res) {
 
 app.set('port', (process.env.PORT || 3000));
 var server = app.listen(app.get('port'), function () {
-    mc.info('[RADDAR]-[BACKEND]-[WEBSERVICES] init on port:['+app.get('port')+']');
+    mc.info('[RADDAR]-[BACKEND]-[WEBSERVICES] init on port:[' + app.get('port') + ']');
 });
 
