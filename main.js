@@ -1461,7 +1461,7 @@ app.post('/getClosestPoints', function (req, res) {
                         + " left join enc_rdr_tag_group tgroup ON   dest4.id_credential=tgroup.id_credential AND tgroup.selected=1 "
                         + " WHERE tgroup.id_tag_group IS NOT NULL "
                         + " )dest5 "
-                        + " left join enc_rdr_tags tags ON  dest5.id_credential=tags.id_credential and  dest5.id_tag_group=tags.id_tag_group  "
+                        + " left join enc_rdr_tags tags ON  dest5.id_credential=tags.id_credential and  dest5.id_tag_group=tags.id_tag_group and tags.selected=1 "
                         + " )radar_point "
                         + " WHERE  "
                         + "             1<>0  "
@@ -1620,7 +1620,7 @@ app.post('/getClosestTags', function (req, res) {
                         " left join enc_rdr_tag_group tgroup ON dest4.id_credential=tgroup.id_credential AND tgroup.selected=1 " +
                         " WHERE tgroup.id_tag_group IS NOT NULL " +
                         " )dest5 " +
-                        " left join enc_rdr_tags tags ON dest5.id_credential=tags.id_credential and dest5.id_tag_group=tags.id_tag_group " +
+                        " left join enc_rdr_tags tags ON dest5.id_credential=tags.id_credential and dest5.id_tag_group=tags.id_tag_group and tags.selected=1 " +
                         " )dest6 " +
                         " ORDER BY dest6.tag ";
 
