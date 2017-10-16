@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //<editor-fold defaultstate="collapsed" desc="ENCPrimal">
-class ENCPrimals {
+class ENCPrimal {
     constructor() {
     }
 }
