@@ -45,8 +45,8 @@ class ENC extends ENCPrimal {
     static UNDEFINED() {
         return  'undefined';
     }
-    static BOLEAN() {
-        return  'undefined';
+    static BOOLEAN() {
+        return  'boolean';
     }
     static NUMBER() {
         return  'number';
@@ -75,8 +75,8 @@ class ENC extends ENCPrimal {
                 return ENC.NULL();
             case ENC.UNDEFINED():
                 return ENC.UNDEFINED();
-            case ENC.BOLEAN():
-                return ENC.BOLEAN();
+            case ENC.BOOLEAN():
+                return ENC.BOOLEAN();
             case ENC.NUMBER():
                 return ENC.NUMBER();
             case ENC.STRING():
@@ -328,7 +328,7 @@ class ENCUnit extends ENCPrimal {
                 return '[E-Null]';
             case ENC.UNDEFINED():
                 return '[E-Undefined]';
-            case ENC.BOLEAN():
+            case ENC.BOOLEAN():
                 if (this.unitData) {
                     return 'true';
                 } else {
@@ -1967,7 +1967,7 @@ app.post('/setSelectedIndividualTag', function (req, res) {
                     new FieldValidation('idSession', ENC.STRING()),
                     new FieldValidation('idTagGroup', ENC.NUMBER()),
                     new FieldValidation('tag', ENC.STRING()),
-                    new FieldValidation('selected', ENC.BOLEAN())
+                    new FieldValidation('selected', ENC.BOOLEAN())
                 ]);
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
