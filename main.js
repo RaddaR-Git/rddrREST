@@ -125,7 +125,6 @@ class ENC extends ENCPrimal {
             typeFail: [],
             extra: []
         };
-
         var currentRequiredFieldName = null;
         var currentRequiredFieldType = null;
         var currentInputFieldName = null;
@@ -135,7 +134,6 @@ class ENC extends ENCPrimal {
             currentRequiredFieldName = fieldValidations[i].requiredFieldName;
             currentRequiredFieldType = fieldValidations[i].requiredFieldType;
             fieldsRequired[currentRequiredFieldName] = true;
-
             if (!inData.hasOwnProperty(currentRequiredFieldName)) {
                 response.missing.push(new FieldMissing(currentRequiredFieldName, currentRequiredFieldType));
             } else {
@@ -491,7 +489,6 @@ class ENCManagerCommunication extends ENCPrimal {
     constructor() {
         super();
         this.currentMsg = new ENCUnit(null);
-
         log4js.configure({
             appenders: {
                 trace_appender: {type: 'console'},
@@ -511,14 +508,12 @@ class ENCManagerCommunication extends ENCPrimal {
                 FCC: {appenders: ['trace_appender', 'debug_appender', 'info_appender', 'warn_appender', "error_appender", "fatal_appender"], level: 'fatal'}
             }
         });
-
         this.loggerTrace = log4js.getLogger("TCC");
         this.loggerDebug = log4js.getLogger("DCC");
         this.loggerInfo = log4js.getLogger("ICC");
         this.loggerWarn = log4js.getLogger("WCC");
         this.loggerError = log4js.getLogger("ECC");
         this.loggerFatal = log4js.getLogger("FCC");
-
     }
 
     trace(msg) {
@@ -577,7 +572,6 @@ class ENCManagerMysql extends ENCPrimal {
 
             mc.info('RID:[' + input.requestID + ']-[SELECT]-[START]');
             mc.debug('RID:[' + input.requestID + ']-[SELECT]-[QUERY]:[' + input.query + ']');
-
             var con = mysql.createConnection(input.connectionParameters);
             con.connect(function (err) {
                 if (err) {
@@ -659,11 +653,11 @@ class ENCManagerMail extends ENCPrimal {
             mc.debug('Inicia envio de mail');
             try {
                 ENC.validateType('mailParameters', input.mailParameters, ENC.OBJECT());
-                ENC.validateType('from', input.from, ENC.STRING());// sender address
-                ENC.validateType('to', input.to, ENC.STRING());// list of receivers
-                ENC.validateType('subject', input.subject, ENC.STRING());// Subject line
-                ENC.validateType('text', input.text, ENC.STRING());// plain text body
-                ENC.validateType('html', input.html, ENC.STRING());// html body
+                ENC.validateType('from', input.from, ENC.STRING()); // sender address
+                ENC.validateType('to', input.to, ENC.STRING()); // list of receivers
+                ENC.validateType('subject', input.subject, ENC.STRING()); // Subject line
+                ENC.validateType('text', input.text, ENC.STRING()); // plain text body
+                ENC.validateType('html', input.html, ENC.STRING()); // html body
 
             } catch (err) {
                 reject(err);
@@ -677,7 +671,6 @@ class ENCManagerMail extends ENCPrimal {
                 text: input.text, // plain text body
                 html: input.html// html body
             };
-
             var transporter = nodemailer.createTransport(input.mailParameters);
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
@@ -724,9 +717,6 @@ var replaceAll = function (str, find, replace) {
     }
     return temp;
 };
-
-
-
 //</editor-fold>
 
 //------------------------------------------------------------------------------
@@ -752,7 +742,6 @@ app.use(express.static('Images'))//for file satatic service express;
 app.use(express.static('Nest'))//for file satatic service express;
 
 var validator = require("email-validator");
-
 var mn = new ENCManagerNest();
 var mc = new ENCManagerCommunication();
 var mms = new ENCManagerMysql();
@@ -773,7 +762,6 @@ var connectionParameters1 = {
     secure: false,
     database: 'radar_enc'
 };
-
 var mailParameters1 = {
     host: 'a2plcpnl0014.prod.iad2.secureserver.net',
     port: 465,
@@ -783,7 +771,6 @@ var mailParameters1 = {
         pass: 'Mylene01011'
     }
 };
-
 var delta = "0.001";
 var radarMeters = "100";
 //var delta = "10.001";
@@ -801,7 +788,6 @@ app.get('/', function (req, res) {
     var warn = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L3_warn_appender.log";
     var error = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L4_error_appender.log";
     var fatal = req.protocol + '://' + req.get('host') + replaceAll(mn.logsRute(), "Nest", "") + "L5_fatal_appender.log";
-
     var text = " RaddaR REST Servicio iniciado";
     text = text + "<br>";
     text = text + "<a href='" + debug + "'>" + debug + "</a>";
@@ -813,9 +799,7 @@ app.get('/', function (req, res) {
     text = text + "<a href='" + error + "'>" + error + "</a>";
     text = text + "<br>";
     text = text + "<a href='" + fatal + "'>" + fatal + "</a>";
-
     res.send(text);
-
 });
 //</editor-fold>
 
@@ -830,7 +814,6 @@ app.post('/trunOff', function (req, res) {
         connectionParameters: connectionParameters1,
         query: "SELECT * FROM enclave_database_infraestructure.enc_system WHERE ENCkey='sysKey'"
     };
-
     mn.init(dataPacket)
             .then(function (dp) {
                 mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/trunOff]');
@@ -865,7 +848,6 @@ app.post('/trunOff', function (req, res) {
                 response.error = err.message;
                 res.json(response);
             });
-
 });
 //</editor-fold>
 
@@ -880,7 +862,6 @@ app.post('/login', function (req, res) {
         query: "SELECT * FROM enclave_database_infraestructure.enc_system WHERE ENCkey='sysKey'",
         looked: 0
     };
-
     mn.init(dataPacket)
             .then(function (dp) {
                 mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/login]');
@@ -891,7 +872,6 @@ app.post('/login', function (req, res) {
                     new FieldValidation('email', ENC.STRING()),
                     new FieldValidation('password', ENC.STRING())
                 ]);
-
                 dp.email = req.body.email;
                 dp.password = req.body.password;
                 dp.sessionKey = ENCRandomGenerator.getFullRandomKey();
@@ -1256,7 +1236,6 @@ app.post('/updatePosition', function (req, res) {
         connectionParameters: connectionParameters1,
         looked: 0
     };
-
     response.updated = false;
     mn.init(dataPacket)
             .then(function (dp) {
@@ -1271,13 +1250,11 @@ app.post('/updatePosition', function (req, res) {
                             new FieldValidation('latitude', ENC.NUMBER()),
                             new FieldValidation('longitude', ENC.NUMBER())
                         ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
                 dp.latitude = req.body.latitude;
                 dp.longitude = req.body.longitude;
-
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
                 }
@@ -1345,7 +1322,6 @@ app.post('/getClosestPoints', function (req, res) {
         connectionParameters: connectionParameters1,
         looked: 0
     };
-
     mn.init(dataPacket)
             .then(function (dp) {
                 mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getClosestPoints]');
@@ -1358,11 +1334,9 @@ app.post('/getClosestPoints', function (req, res) {
                             new FieldValidation('idSession', ENC.STRING()),
                             new FieldValidation('tags', ENC.ARRAY())
                         ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
-
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
                 }
@@ -1400,7 +1374,6 @@ app.post('/getClosestPoints', function (req, res) {
                     extraCondition = ' AND ( 1=0 ' + extraCondition + ') ';
                 }
                 dp.extraCondition = extraCondition;
-
                 return dp;
             })
             .then(function (dp) {
@@ -1478,11 +1451,8 @@ app.post('/getClosestPoints', function (req, res) {
                         + " radar_point_g.distance, "
                         + " radar_point_g.id_avatar, "
                         + " radar_point_g.alias";
-
-
                 dataPacket.query = replaceAll(dataPacket.query, '@orig_lat', response.latitude + "");
                 dataPacket.query = replaceAll(dataPacket.query, '@orig_lon', response.longitude + "");
-
                 dataPacket.query = replaceAll(dataPacket.query, '@delta', delta + "");
                 dataPacket.query = replaceAll(dataPacket.query, '@radarMeters', radarMeters + "");
                 return dp;
@@ -1491,12 +1461,9 @@ app.post('/getClosestPoints', function (req, res) {
             .then(function (dp) {
                 var rows = dp.queryResult.rows;
                 var currentRow;
-
                 response.closestPoints = new Array();
-
                 for (var i = 0; i < rows.length; i++) {
                     currentRow = rows[i];
-
                     response.closestPoints.push(
                             {
                                 idSession: currentRow.id_session,
@@ -1537,7 +1504,6 @@ app.post('/getClosestTags', function (req, res) {
         connectionParameters: connectionParameters1,
         looked: 0
     };
-
     mn.init(dataPacket)
             .then(function (dp) {
                 mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getClosestTags]');
@@ -1552,7 +1518,6 @@ app.post('/getClosestTags', function (req, res) {
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
-
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
                 }
@@ -1623,10 +1588,8 @@ app.post('/getClosestTags', function (req, res) {
                         " left join enc_rdr_tags tags ON dest5.id_credential=tags.id_credential and dest5.id_tag_group=tags.id_tag_group and tags.selected=1 " +
                         " )dest6 " +
                         " ORDER BY dest6.tag ";
-
                 dataPacket.query = replaceAll(dataPacket.query, '@orig_lat', response.latitude + "");
                 dataPacket.query = replaceAll(dataPacket.query, '@orig_lon', response.longitude + "");
-
                 dataPacket.query = replaceAll(dataPacket.query, '@delta', delta + "");
                 dataPacket.query = replaceAll(dataPacket.query, '@radarMeters', radarMeters + "");
                 return dp;
@@ -1675,7 +1638,6 @@ app.post('/createTagGroup', function (req, res) {
                     new FieldValidation('idSession', ENC.STRING()),
                     new FieldValidation('tagGroupName', ENC.STRING())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -1766,7 +1728,6 @@ app.post('/deleteTagGroup', function (req, res) {
                     new FieldValidation('idSession', ENC.STRING()),
                     new FieldValidation('idTagGroup', ENC.NUMBER())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -1858,7 +1819,6 @@ app.post('/setSelectedTagGroup', function (req, res) {
                     new FieldValidation('idSession', ENC.STRING()),
                     new FieldValidation('idTagGroup', ENC.NUMBER())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2071,7 +2031,6 @@ app.post('/getAllTagGroupFromCredential', function (req, res) {
                     new FieldValidation('idCredential', ENC.NUMBER()),
                     new FieldValidation('idSession', ENC.STRING())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2107,7 +2066,6 @@ app.post('/getAllTagGroupFromCredential', function (req, res) {
             .then(function (dp) {
                 var rows = dp.queryResult.rows;
                 var currentRow;
-
                 response.tagGroups = new Array();
                 for (var i = 0; i < rows.length; i++) {
                     currentRow = rows[i];
@@ -2156,7 +2114,6 @@ app.post('/createTag', function (req, res) {
                     new FieldValidation('idTagGroup', ENC.NUMBER()),
                     new FieldValidation('tag', ENC.STRING())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2249,7 +2206,6 @@ app.post('/deleteTag', function (req, res) {
                     new FieldValidation('idTagGroup', ENC.NUMBER()),
                     new FieldValidation('tag', ENC.STRING())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2341,7 +2297,6 @@ app.post('/getAllTagsFromCredentialTagGroup', function (req, res) {
                     new FieldValidation('idSession', ENC.STRING()),
                     new FieldValidation('idTagGroup', ENC.NUMBER())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2379,7 +2334,6 @@ app.post('/getAllTagsFromCredentialTagGroup', function (req, res) {
             .then(function (dp) {
                 var rows = dp.queryResult.rows;
                 var currentRow;
-
                 response.tags = new Array();
                 for (var i = 0; i < rows.length; i++) {
                     currentRow = rows[i];
@@ -2426,7 +2380,6 @@ app.post('/getAllAvatars', function (req, res) {
                     new FieldValidation('idCredential', ENC.NUMBER()),
                     new FieldValidation('idSession', ENC.STRING())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2463,7 +2416,6 @@ app.post('/getAllAvatars', function (req, res) {
             .then(function (dp) {
                 var rows = dp.queryResult.rows;
                 var currentRow;
-
                 response.avatars = new Array();
                 for (var i = 0; i < rows.length; i++) {
                     currentRow = rows[i];
@@ -2510,7 +2462,6 @@ app.post('/setSelectedAvatar', function (req, res) {
                     new FieldValidation('idSession', ENC.STRING()),
                     new FieldValidation('idAvatar', ENC.NUMBER())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2599,12 +2550,10 @@ app.post('/getUserNiknames', function (req, res) {
                     new FieldValidation('idSession', ENC.STRING()),
                     new FieldValidation('idCredentials', ENC.ARRAY())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
                 dp.idCredentials = req.body.idCredentials;
-
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
                 }
@@ -2641,7 +2590,6 @@ app.post('/getUserNiknames', function (req, res) {
             .then(function (dp) {
                 var rows = dp.queryResult.rows;
                 var currentRow;
-
                 response.credentials = new Array();
                 for (var i = 0; i < rows.length; i++) {
                     currentRow = rows[i];
@@ -2690,7 +2638,6 @@ app.post('/updateTag', function (req, res) {
                     new FieldValidation('tag', ENC.STRING()),
                     new FieldValidation('newTag', ENC.STRING())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2795,7 +2742,6 @@ app.post('/updateTagGroup', function (req, res) {
                     new FieldValidation('idTagGroup', ENC.NUMBER()),
                     new FieldValidation('newTagGroupName', ENC.STRING())
                 ]);
-
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
@@ -2881,6 +2827,506 @@ app.post('/updateTagGroup', function (req, res) {
             });
 });
 //</editor-fold>
+
+
+
+
+
+//<editor-fold defaultstate="collapsed" desc="addUserToWhiteList">
+app.post('/addUserToWhiteList', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/addUserToWhiteList]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('idCredentialToAdd', ENC.NUMBER())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.idCredentialToAdd = req.body.idCredentialToAdd;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                if (dp.idCredential.idCredential === dp.idCredentialToAdd) {
+                    throw new Error("No se puede añadir el mismo usuario a su propia lista.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT * FROM  enc_white_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    throw new Error("La Relacion ya existe.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.dml = " DELETE FROM  enc_black_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                dp.dml = " INSERT INTO enc_white_list (id_credential, id_credential_relation) values( " + dp.idCredential + ", " + dp.idCredentialToAdd + ")";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                console.log(dp);
+                if (dp.hasOwnProperty('resultDML')) {
+                    if (dp.resultDML.hasOwnProperty('affectedRows')) {
+                    } else {
+                        response.added = true;
+                        throw new Error("No se pudo Añadir a lista blanca.");
+                    }
+                } else {
+                    throw new Error("No se pudo Añadir a lista blanca.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/addUserToWhiteList]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/addUserToWhiteList]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="addUserToBlackList">
+app.post('/addUserToBlackList', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/addUserToBlackList]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('idCredentialToAdd', ENC.NUMBER())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.idCredentialToAdd = req.body.idCredentialToAdd;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                if (dp.idCredential.idCredential === dp.idCredentialToAdd) {
+                    throw new Error("No se puede añadir el mismo usuario a su propia lista.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT * FROM  enc_black_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    throw new Error("La Relacion ya existe.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.dml = " DELETE FROM  enc_white_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                dp.dml = " INSERT INTO enc_black_list (id_credential, id_credential_relation) values( " + dp.idCredential + ", " + dp.idCredentialToAdd + ")";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                console.log(dp);
+                if (dp.hasOwnProperty('resultDML')) {
+                    if (dp.resultDML.hasOwnProperty('affectedRows')) {
+                        response.added = true;
+                    } else {
+                        throw new Error("No se pudo Añadir a lista negra.");
+                    }
+                } else {
+                    throw new Error("No se pudo Añadir a lista negra.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/addUserToWhiteList]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/addUserToBlackList]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="removeUserFromWhiteList">
+app.post('/addUserToWhiteList', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/removeUserFromWhiteList]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('idCredentialToAdd', ENC.NUMBER())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.idCredentialToAdd = req.body.idCredentialToAdd;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                if (dp.idCredential.idCredential === dp.idCredentialToAdd) {
+                    throw new Error("No se puede añadir el mismo usuario a su propia lista.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT * FROM  enc_white_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (!dp.queryResult.hasRows()) {
+                    throw new Error("La Relacion no existe.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.dml = " DELETE FROM  enc_white_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                console.log(dp);
+                if (dp.hasOwnProperty('resultDML')) {
+                    if (dp.resultDML.hasOwnProperty('affectedRows')) {
+                    } else {
+                        response.removed = true;
+                        throw new Error("No se pudo Remover de la lista blanca..");
+                    }
+                } else {
+                    throw new Error("No se pudo Remover de la lista blanca..");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/removeUserFromWhiteList]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/removeUserFromWhiteList]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="removeUserFromBlackList">
+app.post('/removeUserFromBlackList', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/removeUserFromBlackList]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('idCredentialToAdd', ENC.NUMBER())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.idCredentialToAdd = req.body.idCredentialToAdd;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                if (dp.idCredential.idCredential === dp.idCredentialToAdd) {
+                    throw new Error("No se puede añadir el mismo usuario a su propia lista.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT * FROM  enc_black_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (!dp.queryResult.hasRows()) {
+                    throw new Error("La Relacion no existe.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.dml = " DELETE FROM  enc_black_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                console.log(dp);
+                if (dp.hasOwnProperty('resultDML')) {
+                    if (dp.resultDML.hasOwnProperty('affectedRows')) {
+                    } else {
+                        response.removed = true;
+                        throw new Error("No se pudo Remover de la lista negra.");
+                    }
+                } else {
+                    throw new Error("No se pudo Remover de la lista negra.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/removeUserFromBlackList]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/removeUserFromBlackList]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+
+//<editor-fold defaultstate="collapsed" desc="getMyWhiteList">
+app.post('/getMyWhiteList', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getMyWhiteList]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                var inClausule = 'IN(' + dp.idCredentials.toString() + ')';
+                dp.query = "SELECT \n" +
+                        "tbCred.*,\n" +
+                        "IF(tbCred.last_activity>tbCred.last5 ,1,0) connected,NOW()\n" +
+                        "FROM(\n" +
+                        "SELECT \n" +
+                        "cred.id_credential id_credential, \n" +
+                        "cred.alias alias, \n" +
+                        "cred.id_avatar id_avatar,\n" +
+                        "ses.last_activity,\n" +
+                        "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
+                        "FROM  enc_white_list wl\n" +
+                        "LEFT JOIN enc_credential cred ON  wl.id_credential_relation=cred.id_credential\n" +
+                        "LEFT JOIN enc_rdr_session ses ON  wl.id_credential_relation=ses.id_credential\n" +
+                        "WHERE wl.id_credential="+dp.idCredential+" \n" +
+                        ")tbCred";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                var rows = dp.queryResult.rows;
+                var currentRow;
+                response.whiteList = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    currentRow = rows[i];
+                    response.whiteList.push(
+                            {
+                                id_credential: currentRow.id_credential,
+                                alias: currentRow.alias,
+                                id_avatar: currentRow.id_avatar,
+                                connected: currentRow.connected
+                            }
+                    );
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/getMyWhiteList]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/getMyWhiteList]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+
 
 
 

@@ -1,0 +1,450 @@
+http://localhost:3000/trunOff
+//-----------INPUT-----------------
+{
+"sysKey":"8657802"
+}
+//-----------OUTPUT----------------
+{"trunOff":true}
+
+
+
+http://localhost:3000/login
+//-----------INPUT-----------------
+{
+	"email":"oscar.avila@enclave.com.mx",
+	"password":"Pass01011"
+}
+//-----------OUTPUT----------------
+{
+    "access": "login",
+    "idCredential": 1,
+    "idSession": "e00e"
+}
+
+http://localhost:3000/createCredential
+//-----------INPUT-----------------
+{
+	"email":"osi@hotmail.com",
+	"phone" : "5887852145",
+	"password" : "ProPro",
+	"alias" : "ElPro"
+}
+//-----------OUTPUT----------------
+{
+    "id_credential": 7,
+    "sysKey": "DMMU1093"
+}
+
+
+http://localhost:3000/sendMeMailValidation
+//-----------INPUT-----------------
+{
+	"email":"oscar_avilex@hotmail.com",
+	"password" : "ProPro"
+}
+//-----------OUTPUT----------------
+{
+    "id_credential": 7,
+    "sysKey": "DMMU1093"
+}
+
+
+
+http://localhost:3000/validateEmail
+//-----------INPUT-----------------
+{
+	"email":"oscar_avilex@hotmail.com",
+	"password" : "ProPro",
+	"systemKey":"dsadas456"
+}
+//-----------OUTPUT----------------
+{
+    "updated": true
+}
+
+
+
+
+http://localhost:3000/updatePosition
+//-----------INPUT-----------------
+{
+    "idCredential": 1,
+    "idSession": "e00e",
+    "latitude": 55.5,
+    "longitude": 200
+}
+//-----------OUTPUT----------------
+{
+    "updated": true,
+    "activeSession": true,
+    "oldLatitude": 55.5,
+    "oldLongitude": 200,
+    "newLatitude": 55.5,
+    "newLongitude": 200
+}
+
+
+http://localhost:3000/getClosestPoints
+//-----------INPUT-----------------
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+		"tags":[
+				"TRISTE",
+				"ALOCADO",
+				"BORRACHO",
+				"VENDIENDO"
+				]
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "latitude": 55.5,
+    "longitude": 200,
+    "closestPoints": [
+        {
+            "idSession": 1,
+            "idCredential": 2,
+            "creation": "2017-08-10T16:31:18.000Z",
+            "latitude": 19.429974,
+            "longitude": -99.136552,
+            "activity": 1,
+            "last_activity": null,
+            "distance": 86.23167388571744,
+            "idAvatar": 0,
+            "alias": "carlos",
+            "coincidence": 2
+        },
+        {
+            "idSession": 1,
+            "idCredential": 4,
+            "creation": "2017-08-10T16:31:18.000Z",
+            "latitude": 19.43573,
+            "longitude": -99.137879,
+            "activity": 1,
+            "last_activity": null,
+            "distance": 609.9153291301786,
+            "idAvatar": 0,
+            "alias": "sergio",
+            "coincidence": 1
+        }
+    ]
+}
+
+
+
+http://localhost:3000/getClosestTags
+//-----------INPUT-----------------
+{
+	"idCredential": 1,
+    "idSession": "e00e"
+}
+//-----------OUTPUT----------------
+{
+    "selfLatitude": 19.430267,
+    "selfLongitude": -99.137314,
+    "closestTags": [
+        "ABURRIDO",
+        "ALOCADO",
+        "BORRACHO",
+        "TRISTE"
+    ]
+}
+
+
+
+
+http://localhost:3000/createTagGroup
+//-----------INPUT-----------------
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+	"tagGroupName":"TONES"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "idTagGroup": 2
+}
+
+
+
+http://localhost:3000/deleteTagGroup
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+	"idTagGroup":2
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "deleted": true
+}
+
+http://localhost:3000/setSelectedTagGroup
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+	"idTagGroup":6
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "updated": true
+}
+
+
+
+
+
+http://localhost:3000/setSelectedIndividualTag
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+	"idTagGroup":6,
+	"tag":feliz,
+	"selected": true
+}
+//-----------OUTPUT----------------
+{
+	"activeSession": true,
+	"updated": true
+}
+
+
+
+
+
+
+
+http://localhost:3000/getAllTagGroupFromCredential
+{
+	"idCredential": 1,
+    "idSession": "e00e"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "tagGroups": [
+        {
+            "idTagGroup": 1,
+            "idCredential": 1,
+            "tagGroupName": "DEFAULT_GROUP",
+            "selected": 0
+        },
+        {
+            "idTagGroup": 4,
+            "idCredential": 1,
+            "tagGroupName": "TONES1",
+            "selected": 0
+        },
+        {
+            "idTagGroup": 5,
+            "idCredential": 1,
+            "tagGroupName": "TONES2",
+            "selected": 0
+        },
+        {
+            "idTagGroup": 6,
+            "idCredential": 1,
+            "tagGroupName": "TONES3",
+            "selected": 0
+        },
+        {
+            "idTagGroup": 7,
+            "idCredential": 1,
+            "tagGroupName": "TONES4",
+            "selected": 1
+        }
+    ]
+}
+
+
+http://localhost:3000/createTag
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+    "idTagGroup":7,
+    "tag":"POWA4"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "created": true
+}
+
+http://localhost:3000/deleteTag
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+    "idTagGroup":7,
+    "tag":"POWA"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "deleted": true
+}
+
+
+
+http://localhost:3000/getAllTagsFromCredentialTagGroup
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+    "idTagGroup":7
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "tags": [
+        {
+            "idTagGroup": 7,
+            "idCredential": 1,
+            "tag": "POWA2"
+			"selected": true
+        },
+        {
+            "idTagGroup": 7,
+            "idCredential": 1,
+            "tag": "POWA4"
+			"selected": false
+        }
+    ]
+}
+
+
+
+http://localhost:3000/getAllAvatars
+{
+	"idCredential": 1,
+    "idSession": "e00e"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "avatars": [
+        {
+            "id_avatar": 0,
+            "avatar_name": "DefaultUser",
+            "url": "ICON_DEFAULT.png"
+        },
+        {
+            "id_avatar": 1,
+            "avatar_name": "Boy",
+            "url": "ICON_BOY.png"
+        },
+        {
+            "id_avatar": 2,
+            "avatar_name": "Girl",
+            "url": "ICON_GIRL.png"
+        },
+        {
+            "id_avatar": 3,
+            "avatar_name": "Alien",
+            "url": "ICON_ALIEN.png"
+        }
+    ]
+}
+
+
+
+http://localhost:3000/setSelectedAvatar
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+	"idAvatar":"80"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "updated": true
+}
+
+
+
+
+
+
+http://localhost:3000/getUserNiknames
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+    "idCredentials": [1,2,3]
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "credentials": [
+        {
+            "id_credential": 1,
+            "alias": "oscar",
+            "id_avatar": 2
+        },
+        {
+            "id_credential": 2,
+            "alias": "carlos",
+            "id_avatar": 0
+        },
+        {
+            "id_credential": 3,
+            "alias": "omar",
+            "id_avatar": 0
+        }
+    ]
+}
+
+
+
+
+http://localhost:3000/updateTag
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+    "idTagGroup": 1,
+	"tag":"FELIZ",
+	"newTag":"SUPER_PRO"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "updated": true
+}
+
+
+
+
+
+
+
+http://localhost:3000/updateTagGroup
+{
+	"idCredential": 1,
+    "idSession": "e00e",
+    "idTagGroup": 1,
+	"newTagGroupName":"G1"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "updated": true
+}
+
+
+
+
+
+
+
+http://localhost:3000/
+{}
+//-----------OUTPUT----------------
+{
+    "debug": "Nest/Execution-2017-10-13-12-35-41-751/Logs/L1_debug_appender.log",
+    "info": "Nest/Execution-2017-10-13-12-35-41-751/Logs/L2_info_appender.log",
+    "warn": "Nest/Execution-2017-10-13-12-35-41-751/Logs/L3_warn_appender.log",
+    "error": "Nest/Execution-2017-10-13-12-35-41-751/Logs/L4_error_appender.log",
+    "fatal": "Nest/Execution-2017-10-13-12-35-41-751/Logs/L5_fatal_appender.log"
+}
+
+
