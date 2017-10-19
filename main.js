@@ -3323,6 +3323,101 @@ app.post('/getMyWhiteList', function (req, res) {
 });
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="getMyBlackList">
+app.post('/getMyBlackList', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getMyBlackList]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT \n" +
+                        "tbCred.*,\n" +
+                        "IF(tbCred.last_activity>tbCred.last5 ,1,0) connected,NOW()\n" +
+                        "FROM(\n" +
+                        "SELECT \n" +
+                        "cred.id_credential id_credential, \n" +
+                        "cred.alias alias, \n" +
+                        "cred.id_avatar id_avatar,\n" +
+                        "ses.last_activity,\n" +
+                        "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
+                        "FROM  enc_black_list wl\n" +
+                        "LEFT JOIN enc_credential cred ON  wl.id_credential_relation=cred.id_credential\n" +
+                        "LEFT JOIN enc_rdr_session ses ON  wl.id_credential_relation=ses.id_credential\n" +
+                        "WHERE wl.id_credential=" + dp.idCredential + " \n" +
+                        ")tbCred";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                var rows = dp.queryResult.rows;
+                var currentRow;
+                response.blackList = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    currentRow = rows[i];
+                    response.blackList.push(
+                            {
+                                id_credential: currentRow.id_credential,
+                                alias: currentRow.alias,
+                                id_avatar: currentRow.id_avatar,
+                                connected: currentRow.connected
+                            }
+                    );
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/getMyBlackList]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/getMyBlackList]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
 
 //<editor-fold defaultstate="collapsed" desc="getMyWhiteListSingleStatus">
 app.post('/getMyWhiteListSingleStatus', function (req, res) {
