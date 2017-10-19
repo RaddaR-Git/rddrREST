@@ -3297,10 +3297,10 @@ app.post('/getMyWhiteList', function (req, res) {
             .then(function (dp) {
                 var rows = dp.queryResult.rows;
                 var currentRow;
-                response.whiteList = new Array();
+                response.list = new Array();
                 for (var i = 0; i < rows.length; i++) {
                     currentRow = rows[i];
-                    response.whiteList.push(
+                    response.list.push(
                             {
                                 id_credential: currentRow.id_credential,
                                 alias: currentRow.alias,
@@ -3392,10 +3392,10 @@ app.post('/getMyBlackList', function (req, res) {
             .then(function (dp) {
                 var rows = dp.queryResult.rows;
                 var currentRow;
-                response.blackList = new Array();
+                response.list = new Array();
                 for (var i = 0; i < rows.length; i++) {
                     currentRow = rows[i];
-                    response.blackList.push(
+                    response.list.push(
                             {
                                 id_credential: currentRow.id_credential,
                                 alias: currentRow.alias,
