@@ -2829,7 +2829,7 @@ app.post('/updateTagGroup', function (req, res) {
 //</editor-fold>
 
 
-
+//------------------------------------------------------------------------------
 
 
 //<editor-fold defaultstate="collapsed" desc="addUserToWhiteList">
@@ -3110,8 +3110,8 @@ app.post('/addUserToWhiteList', function (req, res) {
                 console.log(dp);
                 if (dp.hasOwnProperty('resultDML')) {
                     if (dp.resultDML.hasOwnProperty('affectedRows')) {
+                         response.removed = true;
                     } else {
-                        response.removed = true;
                         throw new Error("No se pudo Remover de la lista blanca..");
                     }
                 } else {
@@ -3206,8 +3206,8 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 console.log(dp);
                 if (dp.hasOwnProperty('resultDML')) {
                     if (dp.resultDML.hasOwnProperty('affectedRows')) {
-                    } else {
                         response.removed = true;
+                    } else {
                         throw new Error("No se pudo Remover de la lista negra.");
                     }
                 } else {
@@ -3226,7 +3226,6 @@ app.post('/removeUserFromBlackList', function (req, res) {
             });
 });
 //</editor-fold>
-
 
 
 //<editor-fold defaultstate="collapsed" desc="getMyWhiteList">
@@ -3277,7 +3276,6 @@ app.post('/getMyWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                var inClausule = 'IN(' + dp.idCredentials.toString() + ')';
                 dp.query = "SELECT \n" +
                         "tbCred.*,\n" +
                         "IF(tbCred.last_activity>tbCred.last5 ,1,0) connected,NOW()\n" +
@@ -3291,7 +3289,7 @@ app.post('/getMyWhiteList', function (req, res) {
                         "FROM  enc_white_list wl\n" +
                         "LEFT JOIN enc_credential cred ON  wl.id_credential_relation=cred.id_credential\n" +
                         "LEFT JOIN enc_rdr_session ses ON  wl.id_credential_relation=ses.id_credential\n" +
-                        "WHERE wl.id_credential="+dp.idCredential+" \n" +
+                        "WHERE wl.id_credential=" + dp.idCredential + " \n" +
                         ")tbCred";
                 return dp;
             })
@@ -3326,7 +3324,313 @@ app.post('/getMyWhiteList', function (req, res) {
 //</editor-fold>
 
 
+//<editor-fold defaultstate="collapsed" desc="getMyWhiteListSingleStatus">
+app.post('/getMyWhiteListSingleStatus', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getMyWhiteListSingleStatus]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('idCredentialPartner', ENC.NUMBER())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.idCredentialPartner = req.body.idCredentialPartner;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
 
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT \n" +
+                        "tbCred.*,\n" +
+                        "IF(tbCred.last_activity>tbCred.last5 ,1,0) connected,NOW()\n" +
+                        "FROM(\n" +
+                        "SELECT \n" +
+                        "cred.id_credential id_credential, \n" +
+                        "cred.alias alias, \n" +
+                        "cred.id_avatar id_avatar,\n" +
+                        "ses.last_activity,\n" +
+                        "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
+                        "FROM  enc_white_list wl\n" +
+                        "LEFT JOIN enc_credential cred ON  wl.id_credential_relation=cred.id_credential\n" +
+                        "LEFT JOIN enc_rdr_session ses ON  wl.id_credential_relation=ses.id_credential\n" +
+                        "WHERE wl.id_credential=" + dp.idCredential + " \n" +
+                        "AND wl.id_credential_relation=" + dp.idCredentialPartner + " \n" +
+                        ")tbCred";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                var rows = dp.queryResult.rows;
+                var currentRow;
+                response.whiteList = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    currentRow = rows[i];
+                    response.whiteList.push(
+                            {
+                                id_credential: currentRow.id_credential,
+                                alias: currentRow.alias,
+                                id_avatar: currentRow.id_avatar,
+                                connected: currentRow.connected
+                            }
+                    );
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/getMyWhiteListSingleStatus]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/getMyWhiteListSingleStatus]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="getAllFromSomeone">
+app.post('/getAllFromSomeone', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getMyWhiteListSingleStatus]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('idCredentialFind', ENC.NUMBER())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.idCredentialFind = req.body.idCredentialFind;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+
+                dp.query = "SELECT \n" +
+                        "tbCred.*,\n" +
+                        "IF(tbCred.last_activity>tbCred.last5 ,1,0) connected,NOW()\n" +
+                        "FROM(\n" +
+                        "SELECT \n" +
+                        "cred.id_credential id_credential, \n" +
+                        "cred.alias alias, \n" +
+                        "cred.id_avatar id_avatar,\n" +
+                        "ses.last_activity,\n" +
+                        "cred.phone,\n" +
+                        "cred.email,\n" +
+                        "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
+                        "FROM  enc_credential cred\n" +
+                        "LEFT JOIN enc_rdr_session ses ON  cred.id_credential=ses.id_credential\n" +
+                        "WHERE cred.id_credential=" + dp.idCredential + " \n" +
+                        ")tbCred";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.credential = {
+                            id_credential: firstrow.id_credential,
+                            alias: firstrow.alias,
+                            id_avatar: firstrow.id_avatar,
+                            phone: firstrow.phone,
+                            email: firstrow.email,
+                            connected: firstrow.connected
+                        };
+
+                    } else {
+                        throw new Error("No se encuentra informacion acerca de este usuario.");
+                    }
+
+                } else {
+                    throw new Error("No se encuentra informacion acerca de este usuario.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/getAllFromSomeone]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/getAllFromSomeone]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
+
+
+//<editor-fold defaultstate="collapsed" desc="updateUser">
+app.post('/updateUser', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/updateUser]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING()),
+                    new FieldValidation('passwordOld', ENC.STRING()),
+                    new FieldValidation('passwordNew', ENC.STRING()),
+                    new FieldValidation('alias', ENC.STRING()),
+                    new FieldValidation('email', ENC.STRING()),
+                    new FieldValidation('phone', ENC.STRING())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                dp.passwordOld = req.body.passwordOld;
+                dp.passwordNew = req.body.passwordNew;
+                dp.alias = req.body.alias;
+                dp.email = req.body.email;
+                dp.phone = req.body.phone;
+
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM  enc_credential WHERE id_credential="+dp.idCredential+" and password='"+ dp.passwordOld +"'";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (!dp.queryResult.hasRows()) {
+                        throw new Error("La contraseña no corresponde al usuario seleccionado.");
+                } 
+                return dp;
+            })
+            .then(function (dp) {
+                dp.dml = "UPDATE enc_credential SET  email='"+dp.email+"', phone='"+dp.phone+"',  password='"+ dp.passwordNew +"', alias='"+ dp.alias+"' WHERE id_credential="+dp.idCredential+" ";
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.freeDMLPromise)
+            .then(function (dp) {
+                console.log(dp);
+                if (dp.hasOwnProperty('resultDML')) {
+                    if (dp.resultDML.hasOwnProperty('affectedRows')) {
+                        response.updated = true;
+                    } else {
+                        throw new Error("No se pudo actualizar la informacion de la credencial.");
+                    }
+                } else {
+                    throw new Error("No se pudo actualizar la informacion de la credencial.");
+                }
+                return dp;
+            })
+            
+            
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/updateUser]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/updateUser]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
 
 
 
