@@ -2421,7 +2421,7 @@ app.post('/getAllAvatars', function (req, res) {
                     currentRow = rows[i];
                     response.avatars.push(
                             {
-                                id_avatar: currentRow.id_avatar,
+                                idAvatar: currentRow.id_avatar,
                                 avatar_name: currentRow.avatar_name,
                                 url: currentRow.url
                             }
@@ -2597,7 +2597,7 @@ app.post('/getUserNiknames', function (req, res) {
                             {
                                 idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
-                                id_avatar: currentRow.id_avatar
+                                idAvatar: currentRow.id_avatar
                             }
                     );
                 }
@@ -3304,7 +3304,7 @@ app.post('/getMyWhiteList', function (req, res) {
                             {
                                 idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
-                                id_avatar: currentRow.id_avatar,
+                                idAvatar: currentRow.id_avatar,
                                 connected: currentRow.connected
                             }
                     );
@@ -3399,7 +3399,7 @@ app.post('/getMyBlackList', function (req, res) {
                             {
                                 idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
-                                id_avatar: currentRow.id_avatar,
+                                idAvatar: currentRow.id_avatar,
                                 connected: currentRow.connected
                             }
                     );
@@ -3498,7 +3498,7 @@ app.post('/getMyWhiteListSingleStatus', function (req, res) {
                             {
                                 idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
-                                id_avatar: currentRow.id_avatar,
+                                idAvatar: currentRow.id_avatar,
                                 connected: currentRow.connected
                             }
                     );
@@ -3595,7 +3595,7 @@ app.post('/getAllFromSomeone', function (req, res) {
                         response.credential = {
                             idCredential: firstrow.id_credential,
                             alias: firstrow.alias,
-                            id_avatar: firstrow.id_avatar,
+                            idAvatar: firstrow.id_avatar,
                             phone: firstrow.phone,
                             email: firstrow.email,
                             connected: firstrow.connected
