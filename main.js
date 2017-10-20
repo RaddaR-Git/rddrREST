@@ -1027,7 +1027,7 @@ app.post('/createCredential', function (req, res) {
             })
             .then(mms.freeDMLPromise)
             .then(function (dp) {
-                response.id_credential = dp.resultDML.insertId;
+                response.idCredential = dp.resultDML.insertId;
                 response.sysKey = dp.sysKey;
             })
             .then(function (dp) {
@@ -2595,7 +2595,7 @@ app.post('/getUserNiknames', function (req, res) {
                     currentRow = rows[i];
                     response.credentials.push(
                             {
-                                id_credential: currentRow.id_credential,
+                                idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
                                 id_avatar: currentRow.id_avatar
                             }
@@ -3302,7 +3302,7 @@ app.post('/getMyWhiteList', function (req, res) {
                     currentRow = rows[i];
                     response.list.push(
                             {
-                                id_credential: currentRow.id_credential,
+                                idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
                                 id_avatar: currentRow.id_avatar,
                                 connected: currentRow.connected
@@ -3397,7 +3397,7 @@ app.post('/getMyBlackList', function (req, res) {
                     currentRow = rows[i];
                     response.list.push(
                             {
-                                id_credential: currentRow.id_credential,
+                                idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
                                 id_avatar: currentRow.id_avatar,
                                 connected: currentRow.connected
@@ -3496,7 +3496,7 @@ app.post('/getMyWhiteListSingleStatus', function (req, res) {
                     currentRow = rows[i];
                     response.whiteList.push(
                             {
-                                id_credential: currentRow.id_credential,
+                                idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
                                 id_avatar: currentRow.id_avatar,
                                 connected: currentRow.connected
@@ -3593,7 +3593,7 @@ app.post('/getAllFromSomeone', function (req, res) {
                     var firstrow = dp.queryResult.getFisrtRow();
                     if (firstrow.activity === 1) {
                         response.credential = {
-                            id_credential: firstrow.id_credential,
+                            idCredential: firstrow.id_credential,
                             alias: firstrow.alias,
                             id_avatar: firstrow.id_avatar,
                             phone: firstrow.phone,
