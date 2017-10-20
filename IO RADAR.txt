@@ -453,6 +453,28 @@ http://localhost:3000/getMyWhiteList
 	]
 }
 
+http://localhost:3000/getMyBlackList
+{
+	"idCredential": 2,
+	"idSession": "e20f2b"
+}
+//-----------OUTPUT----------------
+{
+	"activeSession": true,
+	"whiteList": [{
+			"id_credential": 1,
+			"alias": "oscar",
+			"id_avatar": 2,
+			"connected": 0
+		}, {
+			"id_credential": 3,
+			"alias": "omar",
+			"id_avatar": 0,
+			"connected": 0
+		}
+	]
+}
+
 
 
 
