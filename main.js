@@ -3302,6 +3302,7 @@ app.post('/getMyWhiteList', function (req, res) {
                     currentRow = rows[i];
                     response.list.push(
                             {
+                                uno:1,
                                 idCredential: currentRow.id_credential,
                                 alias: currentRow.alias,
                                 idAvatar: currentRow.id_avatar,
