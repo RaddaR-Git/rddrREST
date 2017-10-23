@@ -3578,6 +3578,7 @@ app.post('/getAllFromSomeone', function (req, res) {
                         "cred.alias alias, \n" +
                         "cred.id_avatar id_avatar,\n" +
                         "ses.last_activity,\n" +
+                        "ses.activity,\n" +
                         "cred.phone,\n" +
                         "cred.email,\n" +
                         "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
@@ -3604,7 +3605,6 @@ app.post('/getAllFromSomeone', function (req, res) {
                     } else {
                         throw new Error("No se encuentra informacion acerca de este usuario.");
                     }
-
                 } else {
                     throw new Error("No se encuentra informacion acerca de este usuario.");
                 }
