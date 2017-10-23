@@ -3571,7 +3571,7 @@ app.post('/getAllFromSomeone', function (req, res) {
 
                 dp.query = "SELECT \n" +
                         "tbCred.*,\n" +
-                        "IF(tbCred.last_activity>tbCred.last5 ,1,0) connected,NOW()\n" +
+                        "IF(tbCred.last_activity>tbCred.last5 ,1,0) connected,NOW() now\n" +
                         "FROM(\n" +
                         "SELECT \n" +
                         "cred.id_credential id_credential, \n" +
