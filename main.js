@@ -3110,7 +3110,7 @@ app.post('/addUserToWhiteList', function (req, res) {
                 console.log(dp);
                 if (dp.hasOwnProperty('resultDML')) {
                     if (dp.resultDML.hasOwnProperty('affectedRows')) {
-                         response.removed = true;
+                        response.removed = true;
                     } else {
                         throw new Error("No se pudo Remover de la lista blanca..");
                     }
@@ -3599,7 +3599,8 @@ app.post('/getAllFromSomeone', function (req, res) {
                             idAvatar: firstrow.id_avatar,
                             phone: firstrow.phone,
                             email: firstrow.email,
-                            connected: firstrow.connected
+                            connected: firstrow.connected,
+                            tags:[]
                         };
 
                     } else {
@@ -3609,6 +3610,27 @@ app.post('/getAllFromSomeone', function (req, res) {
                     throw new Error("No se encuentra informacion acerca de este usuario.");
                 }
 
+                return dp;
+            })
+
+            .then(function (dp) {
+                dp.query = " SELECT  tgs.tag  FROM  enc_rdr_tag_group tg\n " +
+                        " LEFT JOIN enc_rdr_tags tgs ON tgs.id_tag_group=tg.id_tag_group AND tgs.id_credential=tg.id_credential\n " +
+                        " WHERE \n " +
+                        " 1=1\n " +
+                        " AND  tg.id_credential=" + dp.idCredential + "\n " +
+                        " AND  tg.selected=1 ";
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                var rows = dp.queryResult.rows;
+                var currentRow;
+                response.credential.tags = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    currentRow = rows[i];
+                    response.credential.tags.push(currentRow.tag);
+                }
                 return dp;
             })
             .then(function (dp) {
@@ -3622,7 +3644,6 @@ app.post('/getAllFromSomeone', function (req, res) {
             });
 });
 //</editor-fold>
-
 
 
 //<editor-fold defaultstate="collapsed" desc="updateUser">
@@ -3684,18 +3705,18 @@ app.post('/updateUser', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM  enc_credential WHERE id_credential="+dp.idCredential+" and password='"+ dp.passwordOld +"'";
+                dataPacket.query = "SELECT * FROM  enc_credential WHERE id_credential=" + dp.idCredential + " and password='" + dp.passwordOld + "'";
                 return dp;
             })
             .then(mms.selectPromise)
             .then(function (dp) {
                 if (!dp.queryResult.hasRows()) {
-                        throw new Error("La contraseña no corresponde al usuario seleccionado.");
-                } 
+                    throw new Error("La contraseña no corresponde al usuario seleccionado.");
+                }
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = "UPDATE enc_credential SET  email='"+dp.email+"', phone='"+dp.phone+"',  password='"+ dp.passwordNew +"', alias='"+ dp.alias+"' WHERE id_credential="+dp.idCredential+" ";
+                dp.dml = "UPDATE enc_credential SET  email='" + dp.email + "', phone='" + dp.phone + "',  password='" + dp.passwordNew + "', alias='" + dp.alias + "' WHERE id_credential=" + dp.idCredential + " ";
                 dp.looked = 1;
                 return dp;
             })
@@ -3713,8 +3734,8 @@ app.post('/updateUser', function (req, res) {
                 }
                 return dp;
             })
-            
-            
+
+
             .then(function (dp) {
                 mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/updateUser]');
                 res.json(response);
