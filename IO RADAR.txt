@@ -475,6 +475,25 @@ http://localhost:3000/getMyBlackList
 	]
 }
 
+http://localhost:3000/getAllFromSomeone
+{
+	"idCredential": 2,
+	"idSession": "e10b20",
+	"idCredentialFind": 2
+}
+//-----------OUTPUT----------------
+{
+	"activeSession": true,
+	"credential": {
+		"idCredential": 2,
+		"alias": "carlos",
+		"idAvatar": 0,
+		"phone": "5559629654",
+		"email": "carlos.palacios@enclave.com.mx",
+		"connected": 1,
+		"tags": ["juanito", "TRISTE"]
+	}
+}
 
 
 
