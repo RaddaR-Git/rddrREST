@@ -495,8 +495,22 @@ http://localhost:3000/getAllFromSomeone
 	}
 }
 
-
-
+http://localhost:3000/updateUser
+{
+	"idCredential": 2,
+	"idSession": "e10b25",
+	"alias": "carlos alberto",
+	"phone": "5559629654",
+	"email": "carlos.palacios@enclave.com.mx",
+	"passwordOld": "Op01011",
+	"passwordNew": "Op01011"
+}
+//-----------OUTPUT----------------
+[{
+		"activeSession": true,
+		"updated": true
+	}
+]
 
 
 http://localhost:3000/
