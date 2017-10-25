@@ -1434,7 +1434,7 @@ app.post('/getClosestPoints', function (req, res) {
                         + " left join enc_credential cred ON  dest4.id_credential=cred.id_credential "
                         + " left join enc_rdr_tag_group tgroup ON   dest4.id_credential=tgroup.id_credential AND tgroup.selected=1 "
                         + " WHERE tgroup.id_tag_group IS NOT NULL "
-                        + " AND cred.id_credential != " + dp.idCredential +
+                        + " AND cred.id_credential != " + dp.idCredential
                         + " )dest5 "
                         + " left join enc_rdr_tags tags ON  dest5.id_credential=tags.id_credential and  dest5.id_tag_group=tags.id_tag_group and tags.selected=1 "
                         + " )radar_point "
