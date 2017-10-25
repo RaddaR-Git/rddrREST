@@ -1317,6 +1317,7 @@ app.post('/updatePosition', function (req, res) {
 app.post('/getClosestPoints', function (req, res) {
     var requestID = new Date().getTime();
     var response = {};
+    var tags = {};
     var dataPacket = {
         requestID: requestID,
         connectionParameters: connectionParameters1,
@@ -1476,7 +1477,7 @@ app.post('/getClosestPoints', function (req, res) {
                                 distance: currentRow.distance,
                                 idAvatar: currentRow.id_avatar,
                                 alias: currentRow.alias,
-                                coincidence: currentRow.coincidence
+                                coincidence: currentRow.coincidencen
                             }
                     );
                 }
@@ -3529,7 +3530,7 @@ app.post('/getAllFromSomeone', function (req, res) {
     };
     mn.init(dataPacket)
             .then(function (dp) {
-                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getMyWhiteListSingleStatus]');
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getAllFromSomeone]');
                 return dp;
             })
             .then(function (dp) {
@@ -3612,7 +3613,6 @@ app.post('/getAllFromSomeone', function (req, res) {
 
                 return dp;
             })
-
             .then(function (dp) {
                 dp.query = " SELECT  tgs.tag  FROM  enc_rdr_tag_group tg\n " +
                         " LEFT JOIN enc_rdr_tags tgs ON tgs.id_tag_group=tg.id_tag_group AND tgs.id_credential=tg.id_credential\n " +
