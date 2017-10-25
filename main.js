@@ -3618,7 +3618,7 @@ app.post('/getAllFromSomeone', function (req, res) {
                         " LEFT JOIN enc_rdr_tags tgs ON tgs.id_tag_group=tg.id_tag_group AND tgs.id_credential=tg.id_credential\n " +
                         " WHERE \n " +
                         " 1=1\n " +
-                        " AND  tg.id_credential=" + dp.idCredential + "\n " +
+                        " AND  tg.id_credential=" + dp.idCredentialFind + "\n " +
                         " AND  tg.selected=1 ";
                 return dp;
             })
