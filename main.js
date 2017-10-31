@@ -3040,7 +3040,7 @@ app.post('/addUserToBlackList', function (req, res) {
 
 
 //<editor-fold defaultstate="collapsed" desc="removeUserFromWhiteList">
-app.post('/addUserToWhiteList', function (req, res) {
+app.post('/removeUserFromWhiteList', function (req, res) {
     var requestID = new Date().getTime();
     var response = {};
     var dataPacket = {
@@ -3057,17 +3057,17 @@ app.post('/addUserToWhiteList', function (req, res) {
                 inputValidation(response, req.body, [
                     new FieldValidation('idCredential', ENC.NUMBER()),
                     new FieldValidation('idSession', ENC.STRING()),
-                    new FieldValidation('idCredentialToAdd', ENC.NUMBER())
+                    new FieldValidation('idCredentialToRemove', ENC.NUMBER())
                 ]);
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
-                dp.idCredentialToAdd = req.body.idCredentialToAdd;
+                dp.idCredentialToRemove = req.body.idCredentialToRemove;
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
                 }
 
-                if (dp.idCredential.idCredential === dp.idCredentialToAdd) {
+                if (dp.idCredential.idCredential === dp.idCredentialToRemove) {
                     throw new Error("No se puede añadir el mismo usuario a su propia lista.");
                 }
 
@@ -3093,7 +3093,7 @@ app.post('/addUserToWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM  enc_white_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                dp.query = "SELECT * FROM  enc_white_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToRemove + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3104,7 +3104,7 @@ app.post('/addUserToWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM  enc_white_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.dml = " DELETE FROM  enc_white_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToRemove + ")";
                 dp.looked = 1;
                 return dp;
             })
@@ -3153,17 +3153,17 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 inputValidation(response, req.body, [
                     new FieldValidation('idCredential', ENC.NUMBER()),
                     new FieldValidation('idSession', ENC.STRING()),
-                    new FieldValidation('idCredentialToAdd', ENC.NUMBER())
+                    new FieldValidation('idCredentialToRemove', ENC.NUMBER())
                 ]);
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
                 dp.idSessionEncoded = req.body.idSession;
-                dp.idCredentialToAdd = req.body.idCredentialToAdd;
+                dp.idCredentialToRemove = req.body.idCredentialToRemove;
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
                 }
 
-                if (dp.idCredential.idCredential === dp.idCredentialToAdd) {
+                if (dp.idCredential.idCredential === dp.idCredentialToRemove) {
                     throw new Error("No se puede añadir el mismo usuario a su propia lista.");
                 }
 
@@ -3189,7 +3189,7 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM  enc_black_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                dp.query = "SELECT * FROM  enc_black_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToRemove + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3200,7 +3200,7 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM  enc_black_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.dml = " DELETE FROM  enc_black_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToRemove + ")";
                 dp.looked = 1;
                 return dp;
             })
