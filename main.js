@@ -2915,8 +2915,8 @@ app.post('/addUserToWhiteList', function (req, res) {
                 console.log(dp);
                 if (dp.hasOwnProperty('resultDML')) {
                     if (dp.resultDML.hasOwnProperty('affectedRows')) {
-                    } else {
                         response.added = true;
+                    } else {
                         throw new Error("No se pudo Añadir a lista blanca.");
                     }
                 } else {
