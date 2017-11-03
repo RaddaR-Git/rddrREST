@@ -431,7 +431,7 @@ class ENCTable extends ENCPrimal {
         return this.rows[0];
     }
     hasRows() {
-        return  this.rows.length > 0;
+        return this.rows.length > 0;
     }
 
 }
@@ -469,10 +469,10 @@ class ENCManagerNest extends ENCPrimal {
                 (this.nestExecution.getMilliseconds()) + '/';
     }
     logsRute() {
-        return  this.currentExecutionRute() + 'Logs/';
+        return this.currentExecutionRute() + 'Logs/';
     }
     init(inputObject) {
-        return  new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             resolve(inputObject);
             return;
         });
@@ -1021,7 +1021,7 @@ app.post('/createCredential', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = "INSERT INTO  enc_credential (id_credential, email, phone, email_valid, phone_valid, password, alias, id_Avatar, systemKey) values (null,'" + dp.email + "','" + dp.phone + "',0,0,'" + dp.password + "','" + dp.alias + "',0,'" + dp.sysKey + "')";
+                dp.dml = "INSERT INTO enc_credential (id_credential, email, phone, email_valid, phone_valid, password, alias, id_Avatar, systemKey) values (null,'" + dp.email + "','" + dp.phone + "',0,0,'" + dp.password + "','" + dp.alias + "',0,'" + dp.sysKey + "')";
                 dp.looked = 1;
                 return dp;
             })
@@ -1262,7 +1262,7 @@ app.post('/updatePosition', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1286,7 +1286,7 @@ app.post('/updatePosition', function (req, res) {
             })
             .then(function (dp) {
                 if (response.hasOwnProperty('activeSession')) {
-                    dp.dml = "UPDATE  enc_rdr_session SET latitude=" + response.newLatitude + " , longitude=" + response.newLongitude + ", last_activity=CURRENT_TIMESTAMP WHERE id_session=" + dp.idSession + " and  id_credential=" + dp.idCredential + " ";
+                    dp.dml = "UPDATE enc_rdr_session SET latitude=" + response.newLatitude + " , longitude=" + response.newLongitude + ", last_activity=CURRENT_TIMESTAMP WHERE id_session=" + dp.idSession + " and id_credential=" + dp.idCredential + " ";
                     dp.looked = 1;
                 }
                 return dp;
@@ -1345,7 +1345,7 @@ app.post('/getClosestPoints', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1379,7 +1379,7 @@ app.post('/getClosestPoints', function (req, res) {
             })
             .then(function (dp) {
                 dataPacket.query =
-                        "SELECT  "
+                        "SELECT "
                         + " radar_point_g.id_session, "
                         + " radar_point_g.id_credential, "
                         + " radar_point_g.creation, "
@@ -1394,12 +1394,12 @@ app.post('/getClosestPoints', function (req, res) {
                         + " FROM ( "
                         + " SELECT radar_point.* FROM( "
 
-                        + " SELECT  "
+                        + " SELECT "
                         + " dest5.* , "
                         + " tags.tag "
                         + " FROM ( "
 
-                        + " SELECT  "
+                        + " SELECT "
                         + " dest4.id_session, "
                         + " dest4.id_credential, "
                         + " dest4.creation, "
@@ -1424,19 +1424,19 @@ app.post('/getClosestPoints', function (req, res) {
                         + " SELECT  * FROM enc_rdr_session dest "
                         + " WHERE  "
                         + " dest.activity=1 "
-                        + " AND  dest.latitude>= @orig_lat-@delta "
-                        + " AND  dest.latitude<= @orig_lat+@delta "
-                        + " AND  dest.longitude>= @orig_lon-@delta "
-                        + " AND  dest.longitude<= @orig_lon+@delta "
+                        + " AND dest.latitude>= @orig_lat-@delta "
+                        + " AND dest.latitude<= @orig_lat+@delta "
+                        + " AND dest.longitude>= @orig_lon-@delta "
+                        + " AND dest.longitude<= @orig_lon+@delta "
                         + " )dest2 "
                         + " )dest3 WHERE dest3.distance<= @radarMeters "
                         + " )dest4 "
-                        + " left join enc_credential cred ON  dest4.id_credential=cred.id_credential "
+                        + " left join enc_credential cred ON dest4.id_credential=cred.id_credential "
                         + " left join enc_rdr_tag_group tgroup ON   dest4.id_credential=tgroup.id_credential AND tgroup.selected=1 "
                         + " WHERE tgroup.id_tag_group IS NOT NULL "
                         + " AND cred.id_credential != " + dp.idCredential
                         + " )dest5 "
-                        + " left join enc_rdr_tags tags ON  dest5.id_credential=tags.id_credential and  dest5.id_tag_group=tags.id_tag_group and tags.selected=1 "
+                        + " left join enc_rdr_tags tags ON dest5.id_credential=tags.id_credential and dest5.id_tag_group=tags.id_tag_group and tags.selected=1 "
                         + " )radar_point "
                         + " WHERE  "
                         + "             1<>0  "
@@ -1526,7 +1526,7 @@ app.post('/getClosestTags', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1651,7 +1651,7 @@ app.post('/createTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1670,7 +1670,7 @@ app.post('/createTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  tag_group_name='" + dp.tagGroupName + "'";
+                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and tag_group_name='" + dp.tagGroupName + "'";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1741,7 +1741,7 @@ app.post('/deleteTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1760,7 +1760,7 @@ app.post('/deleteTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1771,7 +1771,7 @@ app.post('/deleteTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.dml = " DELETE FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 dp.looked = 1;
                 return dp;
             })
@@ -1832,7 +1832,7 @@ app.post('/setSelectedTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1851,7 +1851,7 @@ app.post('/setSelectedTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1868,7 +1868,7 @@ app.post('/setSelectedTagGroup', function (req, res) {
             })
             .then(mms.freeDMLPromise)
             .then(function (dp) {
-                dp.dml = " UPDATE enc_rdr_tag_group SET selected=1 WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.dml = " UPDATE enc_rdr_tag_group SET selected=1 WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 dp.looked = 1;
                 return dp;
             })
@@ -1881,7 +1881,7 @@ app.post('/setSelectedTagGroup', function (req, res) {
                         throw new Error("No se pudo determinar como seleccionada la categoria.");
                     }
                 } else {
-                    throw new Error("No se pudo  determinar como seleccionada la categoria.");
+                    throw new Error("No se pudo determinar como seleccionada la categoria.");
                 }
                 return dp;
             })
@@ -1892,7 +1892,7 @@ app.post('/setSelectedTagGroup', function (req, res) {
             })
             .then(mms.freeDMLPromise)
             .then(function (dp) {
-                dp.dml = " UPDATE enc_rdr_tags SET selected=1 WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.dml = " UPDATE enc_rdr_tags SET selected=1 WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 dp.looked = 1;
                 return dp;
             })
@@ -1944,7 +1944,7 @@ app.post('/setSelectedIndividualTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1963,7 +1963,7 @@ app.post('/setSelectedIndividualTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -1980,9 +1980,9 @@ app.post('/setSelectedIndividualTag', function (req, res) {
             })
             .then(function (dp) {
                 if (dp.selected) {
-                    dp.dml = " UPDATE enc_rdr_tags SET selected=1 WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " and tag='" + dp.tag + "' ";
+                    dp.dml = " UPDATE enc_rdr_tags SET selected=1 WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " and tag='" + dp.tag + "' ";
                 } else {
-                    dp.dml = " UPDATE enc_rdr_tags SET selected=0 WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " and tag='" + dp.tag + "' ";
+                    dp.dml = " UPDATE enc_rdr_tags SET selected=0 WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " and tag='" + dp.tag + "' ";
                 }
 
                 dp.looked = 1;
@@ -1997,7 +1997,7 @@ app.post('/setSelectedIndividualTag', function (req, res) {
                         throw new Error("No se pudo determinar como seleccionada la etiqueta.");
                     }
                 } else {
-                    throw new Error("No se pudo  determinar como seleccionada la etiqueta.");
+                    throw new Error("No se pudo determinar como seleccionada la etiqueta.");
                 }
                 return dp;
             })
@@ -2043,7 +2043,7 @@ app.post('/getAllTagGroupFromCredential', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2128,7 +2128,7 @@ app.post('/createTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2147,7 +2147,7 @@ app.post('/createTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND  tag='" + dp.tag + "'";
+                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND tag='" + dp.tag + "'";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2220,7 +2220,7 @@ app.post('/deleteTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2239,7 +2239,7 @@ app.post('/deleteTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND  tag='" + dp.tag + "'";
+                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND tag='" + dp.tag + "'";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2250,7 +2250,7 @@ app.post('/deleteTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND  tag='" + dp.tag + "' ";
+                dp.dml = " DELETE FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND tag='" + dp.tag + "' ";
                 dp.looked = 1;
                 return dp;
             })
@@ -2310,7 +2310,7 @@ app.post('/getAllTagsFromCredentialTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2392,7 +2392,7 @@ app.post('/getAllAvatars', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2475,7 +2475,7 @@ app.post('/setSelectedAvatar', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2566,7 +2566,7 @@ app.post('/getUserNiknames', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2653,7 +2653,7 @@ app.post('/updateTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2672,7 +2672,7 @@ app.post('/updateTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND  tag='" + dp.tag + "'";
+                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND tag='" + dp.tag + "'";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2683,7 +2683,7 @@ app.post('/updateTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND  tag='" + dp.newTag + "'";
+                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND tag='" + dp.newTag + "'";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2694,7 +2694,7 @@ app.post('/updateTag', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " UPDATE  enc_rdr_tags SET tag='" + dp.newTag + "'   WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND  tag='" + dp.tag + "' ";
+                dp.dml = " UPDATE enc_rdr_tags SET tag='" + dp.newTag + "'   WHERE id_credential=" + dp.idCredential + " AND id_tag_group=" + dp.idTagGroup + " AND tag='" + dp.tag + "' ";
                 dp.looked = 1;
                 return dp;
             })
@@ -2756,7 +2756,7 @@ app.post('/updateTagGroup', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2776,7 +2776,7 @@ app.post('/updateTagGroup', function (req, res) {
             })
 
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2788,7 +2788,7 @@ app.post('/updateTagGroup', function (req, res) {
             })
 
             .then(function (dp) {
-                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and  tag_group_name='" + dp.newTagGroupName + "'";
+                dp.query = "SELECT * FROM enc_rdr_tag_group WHERE id_credential=" + dp.idCredential + " and tag_group_name='" + dp.newTagGroupName + "'";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2801,7 +2801,7 @@ app.post('/updateTagGroup', function (req, res) {
 
 
             .then(function (dp) {
-                dp.dml = " UPDATE enc_rdr_tag_group SET tag_group_name='" + dp.newTagGroupName + "' WHERE id_credential=" + dp.idCredential + " and  id_tag_group=" + dp.idTagGroup + " ";
+                dp.dml = " UPDATE enc_rdr_tag_group SET tag_group_name='" + dp.newTagGroupName + "' WHERE id_credential=" + dp.idCredential + " and id_tag_group=" + dp.idTagGroup + " ";
                 dp.looked = 1;
                 return dp;
             })
@@ -2870,7 +2870,7 @@ app.post('/addUserToWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2889,7 +2889,7 @@ app.post('/addUserToWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM  enc_white_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                dp.query = "SELECT * FROM enc_white_list WHERE id_credential=" + dp.idCredential + " AND id_credential_relation=" + dp.idCredentialToAdd + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2900,7 +2900,7 @@ app.post('/addUserToWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM  enc_black_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.dml = " DELETE FROM enc_black_list WHERE id_credential=" + dp.idCredential + " and id_credential_relation=" + dp.idCredentialToAdd;
                 dp.looked = 1;
                 return dp;
             })
@@ -2972,7 +2972,7 @@ app.post('/addUserToBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -2991,7 +2991,7 @@ app.post('/addUserToBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM  enc_black_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToAdd + " ";
+                dp.query = "SELECT * FROM enc_black_list WHERE id_credential=" + dp.idCredential + " AND id_credential_relation=" + dp.idCredentialToAdd + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3002,7 +3002,7 @@ app.post('/addUserToBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM  enc_white_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToAdd + ")";
+                dp.dml = " DELETE FROM enc_white_list WHERE id_credential=" + dp.idCredential + " and id_credential_relation=" + dp.idCredentialToAdd;
                 dp.looked = 1;
                 return dp;
             })
@@ -3074,7 +3074,7 @@ app.post('/removeUserFromWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3093,7 +3093,7 @@ app.post('/removeUserFromWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM  enc_white_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToRemove + " ";
+                dp.query = "SELECT * FROM enc_white_list WHERE id_credential=" + dp.idCredential + " AND id_credential_relation=" + dp.idCredentialToRemove + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3104,7 +3104,7 @@ app.post('/removeUserFromWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM  enc_white_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToRemove + ")";
+                dp.dml = " DELETE FROM enc_white_list WHERE id_credential=" + dp.idCredential + " and id_credential_relation=" + dp.idCredentialToRemove + ")";
                 dp.looked = 1;
                 return dp;
             })
@@ -3170,7 +3170,7 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3189,7 +3189,7 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = "SELECT * FROM  enc_black_list WHERE id_credential=" + dp.idCredential + " AND  id_credential_relation=" + dp.idCredentialToRemove + " ";
+                dp.query = "SELECT * FROM enc_black_list WHERE id_credential=" + dp.idCredential + " AND id_credential_relation=" + dp.idCredentialToRemove + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3200,7 +3200,7 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = " DELETE FROM  enc_black_list WHERE  id_credential=" + dp.idCredential + " and  id_credential_relation=" + dp.idCredentialToRemove + ")";
+                dp.dml = " DELETE FROM enc_black_list WHERE id_credential=" + dp.idCredential + " and id_credential_relation=" + dp.idCredentialToRemove + ")";
                 dp.looked = 1;
                 return dp;
             })
@@ -3260,7 +3260,7 @@ app.post('/getMyWhiteList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3289,9 +3289,9 @@ app.post('/getMyWhiteList', function (req, res) {
                         "cred.id_avatar id_avatar,\n" +
                         "ses.last_activity,\n" +
                         "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
-                        "FROM  enc_white_list wl\n" +
-                        "LEFT JOIN enc_credential cred ON  wl.id_credential_relation=cred.id_credential\n" +
-                        "LEFT JOIN enc_rdr_session ses ON  wl.id_credential_relation=ses.id_credential\n" +
+                        "FROM enc_white_list wl\n" +
+                        "LEFT JOIN enc_credential cred ON wl.id_credential_relation=cred.id_credential\n" +
+                        "LEFT JOIN enc_rdr_session ses ON wl.id_credential_relation=ses.id_credential\n" +
                         "WHERE wl.id_credential=" + dp.idCredential + " \n" +
                         ")tbCred";
                 return dp;
@@ -3355,7 +3355,7 @@ app.post('/getMyBlackList', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3384,9 +3384,9 @@ app.post('/getMyBlackList', function (req, res) {
                         "cred.id_avatar id_avatar,\n" +
                         "ses.last_activity,\n" +
                         "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
-                        "FROM  enc_black_list wl\n" +
-                        "LEFT JOIN enc_credential cred ON  wl.id_credential_relation=cred.id_credential\n" +
-                        "LEFT JOIN enc_rdr_session ses ON  wl.id_credential_relation=ses.id_credential\n" +
+                        "FROM enc_black_list wl\n" +
+                        "LEFT JOIN enc_credential cred ON wl.id_credential_relation=cred.id_credential\n" +
+                        "LEFT JOIN enc_rdr_session ses ON wl.id_credential_relation=ses.id_credential\n" +
                         "WHERE wl.id_credential=" + dp.idCredential + " \n" +
                         ")tbCred";
                 return dp;
@@ -3453,7 +3453,7 @@ app.post('/getMyWhiteListSingleStatus', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3482,9 +3482,9 @@ app.post('/getMyWhiteListSingleStatus', function (req, res) {
                         "cred.id_avatar id_avatar,\n" +
                         "ses.last_activity,\n" +
                         "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
-                        "FROM  enc_white_list wl\n" +
-                        "LEFT JOIN enc_credential cred ON  wl.id_credential_relation=cred.id_credential\n" +
-                        "LEFT JOIN enc_rdr_session ses ON  wl.id_credential_relation=ses.id_credential\n" +
+                        "FROM enc_white_list wl\n" +
+                        "LEFT JOIN enc_credential cred ON wl.id_credential_relation=cred.id_credential\n" +
+                        "LEFT JOIN enc_rdr_session ses ON wl.id_credential_relation=ses.id_credential\n" +
                         "WHERE wl.id_credential=" + dp.idCredential + " \n" +
                         "AND wl.id_credential_relation=" + dp.idCredentialPartner + " \n" +
                         ")tbCred";
@@ -3552,7 +3552,7 @@ app.post('/getAllFromSomeone', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3585,8 +3585,8 @@ app.post('/getAllFromSomeone', function (req, res) {
                         "cred.phone,\n" +
                         "cred.email,\n" +
                         "DATE_SUB(NOW(), INTERVAL 2 MINUTE) last5\n" +
-                        "FROM  enc_credential cred\n" +
-                        "LEFT JOIN enc_rdr_session ses ON  cred.id_credential=ses.id_credential\n" +
+                        "FROM enc_credential cred\n" +
+                        "LEFT JOIN enc_rdr_session ses ON cred.id_credential=ses.id_credential\n" +
                         "WHERE cred.id_credential=" + dp.idCredential + " \n" +
                         ")tbCred";
                 return dp;
@@ -3616,12 +3616,12 @@ app.post('/getAllFromSomeone', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.query = " SELECT  tgs.tag  FROM  enc_rdr_tag_group tg\n " +
+                dp.query = " SELECT tgs.tag FROM enc_rdr_tag_group tg\n " +
                         " LEFT JOIN enc_rdr_tags tgs ON tgs.id_tag_group=tg.id_tag_group AND tgs.id_credential=tg.id_credential\n " +
                         " WHERE \n " +
                         " 1=1\n " +
-                        " AND  tg.id_credential=" + dp.idCredentialFind + "\n " +
-                        " AND  tg.selected=1 ";
+                        " AND tg.id_credential=" + dp.idCredentialFind + "\n " +
+                        " AND tg.selected=1 ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3688,7 +3688,7 @@ app.post('/updateUser', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND  id_credential=" + dp.idCredential + " ";
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential + " ";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3707,7 +3707,7 @@ app.post('/updateUser', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dataPacket.query = "SELECT * FROM  enc_credential WHERE id_credential=" + dp.idCredential + " and password='" + dp.passwordOld + "'";
+                dataPacket.query = "SELECT * FROM enc_credential WHERE id_credential=" + dp.idCredential + " and password='" + dp.passwordOld + "'";
                 return dp;
             })
             .then(mms.selectPromise)
@@ -3718,7 +3718,7 @@ app.post('/updateUser', function (req, res) {
                 return dp;
             })
             .then(function (dp) {
-                dp.dml = "UPDATE enc_credential SET  email='" + dp.email + "', phone='" + dp.phone + "',  password='" + dp.passwordNew + "', alias='" + dp.alias + "' WHERE id_credential=" + dp.idCredential + " ";
+                dp.dml = "UPDATE enc_credential SET email='" + dp.email + "', phone='" + dp.phone + "',  password='" + dp.passwordNew + "', alias='" + dp.alias + "' WHERE id_credential=" + dp.idCredential + " ";
                 dp.looked = 1;
                 return dp;
             })
