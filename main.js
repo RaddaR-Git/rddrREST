@@ -3061,7 +3061,6 @@ app.post('/removeUserFromWhiteList', function (req, res) {
                 ]);
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
-                dp.idSessionEncoded = req.body.idSession;
                 dp.idCredentialToRemove = req.body.idCredentialToRemove;
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
@@ -3157,7 +3156,6 @@ app.post('/removeUserFromBlackList', function (req, res) {
                 ]);
                 dp.idCredential = req.body.idCredential;
                 dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
-                dp.idSessionEncoded = req.body.idSession;
                 dp.idCredentialToRemove = req.body.idCredentialToRemove;
                 if (!ENC.isStringValidNumber(dp.idSession)) {
                     throw new Error("No es una Sesion Valida.");
