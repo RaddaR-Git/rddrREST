@@ -777,7 +777,7 @@ var mailParameters2 = {
     //secure: false, // secure:true for port 465, secure:false for port 587
     auth: {
         user: 'oscar.avila@enclave.com.mx',
-        pass: 'Mylene01011'
+        pass: 'Mylene010111'
     }
 };
 
