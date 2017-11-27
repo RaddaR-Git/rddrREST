@@ -1,0 +1,30 @@
+[2017-11-27 16:35:02.534] [INFO] ICC - [RADDAR]-[BACKEND]-[WEBSERVICES] init on port:[3000]
+[2017-11-27 16:44:45.418] [INFO] ICC - RID:[1511822685409]-[REQUEST]-[START]:[/sendMeMailValidation]
+[2017-11-27 16:44:45.423] [INFO] ICC - RID:[1511822685409]-[SELECT]-[START]
+[2017-11-27 16:44:45.424] [DEBUG] DCC - RID:[1511822685409]-[SELECT]-[QUERY]:[SELECT * FROM enc_credential WHERE email='oscar.avilaper@inegi.org.mx' AND password='ProPro']
+[2017-11-27 16:44:46.418] [INFO] ICC - RID:[1511822685409]-[SELECT]-[END]:[OK]
+[2017-11-27 16:44:46.420] [DEBUG] DCC - Inicia envio de mail
+[2017-11-27 16:44:46.421] [DEBUG] DCC - Parametros de envio de Email validados.
+[2017-11-27 16:44:48.311] [DEBUG] DCC - Mail enviado Exitosamente al correo:[oscar.avilaper@inegi.org.mx]
+[2017-11-27 16:44:48.311] [INFO] ICC - RID:[1511822685409]-[REQUEST]-[END]:[/sendMeMailValidation]
+[2017-11-27 16:45:49.769] [INFO] ICC - RID:[1511822749768]-[REQUEST]-[START]:[/sendMeMailValidation]
+[2017-11-27 16:45:49.770] [INFO] ICC - RID:[1511822749768]-[SELECT]-[START]
+[2017-11-27 16:45:49.773] [DEBUG] DCC - RID:[1511822749768]-[SELECT]-[QUERY]:[SELECT * FROM enc_credential WHERE email='oscar.avilex@hotmail.com' AND password='ProPro']
+[2017-11-27 16:45:50.119] [INFO] ICC - RID:[1511822749768]-[SELECT]-[END]:[OK]
+[2017-11-27 16:45:50.122] [ERROR] ECC - RID:[1511822749768]-[REQUEST]-[ERROR]:[Usuario o Contraseña no validos.]:[/sendMeMailValidation]
+[2017-11-27 16:51:13.903] [INFO] ICC - RID:[1511823073902]-[REQUEST]-[START]:[/sendMeMailValidation]
+[2017-11-27 16:51:13.905] [INFO] ICC - RID:[1511823073902]-[SELECT]-[START]
+[2017-11-27 16:51:13.906] [DEBUG] DCC - RID:[1511823073902]-[SELECT]-[QUERY]:[SELECT * FROM enc_credential WHERE email='oscar_avilex@hotmail.com' AND password='PP01011']
+[2017-11-27 16:51:14.239] [INFO] ICC - RID:[1511823073902]-[SELECT]-[END]:[OK]
+[2017-11-27 16:51:14.241] [DEBUG] DCC - Inicia envio de mail
+[2017-11-27 16:51:14.242] [DEBUG] DCC - Parametros de envio de Email validados.
+[2017-11-27 16:51:15.724] [DEBUG] DCC - Mail enviado Exitosamente al correo:[oscar_avilex@hotmail.com]
+[2017-11-27 16:51:15.724] [INFO] ICC - RID:[1511823073902]-[REQUEST]-[END]:[/sendMeMailValidation]
+[2017-11-27 16:55:58.608] [INFO] ICC - RID:[1511823358608]-[REQUEST]-[START]:[/sendMeMailValidation]
+[2017-11-27 16:55:58.610] [INFO] ICC - RID:[1511823358608]-[SELECT]-[START]
+[2017-11-27 16:55:58.610] [DEBUG] DCC - RID:[1511823358608]-[SELECT]-[QUERY]:[SELECT * FROM enc_credential WHERE email='oavilex@gmail.com' AND password='ZZ01011']
+[2017-11-27 16:55:58.942] [INFO] ICC - RID:[1511823358608]-[SELECT]-[END]:[OK]
+[2017-11-27 16:55:58.943] [DEBUG] DCC - Inicia envio de mail
+[2017-11-27 16:55:58.943] [DEBUG] DCC - Parametros de envio de Email validados.
+[2017-11-27 16:56:00.445] [DEBUG] DCC - Mail enviado Exitosamente al correo:[oavilex@gmail.com]
+[2017-11-27 16:56:00.445] [INFO] ICC - RID:[1511823358608]-[REQUEST]-[END]:[/sendMeMailValidation]

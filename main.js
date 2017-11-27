@@ -763,6 +763,15 @@ var connectionParameters1 = {
     database: 'radar_enc'
 };
 var mailParameters1 = {
+    host: 'smtp.gmail.com',
+    port: 465,
+    //secure: false, // secure:true for port 465, secure:false for port 587
+    auth: {
+        user: 'raddar.contacto@gmail.com',
+        pass: 'Ttt01011'
+    }
+};
+var mailParameters2 = {
     host: 'a2plcpnl0014.prod.iad2.secureserver.net',
     port: 465,
     //secure: false, // secure:true for port 465, secure:false for port 587
@@ -771,6 +780,7 @@ var mailParameters1 = {
         pass: 'Mylene01011'
     }
 };
+
 var delta = "0.001";
 var radarMeters = "100";
 //var delta = "10.001";
