@@ -1981,7 +1981,7 @@ app.post('/setSelectedIndividualTag', function (req, res) {
                 if (dp.queryResult.hasRows()) {
                     var firstrow = dp.queryResult.getFisrtRow();
                     if (firstrow.selected !== 1) {
-                        throw new Error("No se puede seleccionar Etiqueta de un Grupo de Etiquetas no seleccionado.");
+                        throw new Error("Se debe seleccionar primero el grupo.");
                     }
                 } else {
                     throw new Error("La TagGroup no existe.");
