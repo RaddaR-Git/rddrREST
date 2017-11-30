@@ -523,5 +523,3 @@ http://localhost:3000/
     "error": "Nest/Execution-2017-10-13-12-35-41-751/Logs/L4_error_appender.log",
     "fatal": "Nest/Execution-2017-10-13-12-35-41-751/Logs/L5_fatal_appender.log"
 }
-
-
