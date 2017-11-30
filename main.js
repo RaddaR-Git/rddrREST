@@ -781,8 +781,8 @@ var mailParameters2 = {
     }
 };
 
-var delta = "0.0015";
-var radarMeters = "150";
+var delta = "0.002";
+var radarMeters = "200";
 //var delta = "10.001";
 //var radarMeters = "100000000";
 var versusKey = 'YAsiEsComoSalveALaNavidad';
