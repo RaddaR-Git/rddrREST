@@ -314,6 +314,31 @@ http://localhost:3000/getAllTagsFromCredentialTagGroup
 }
 
 
+http://localhost:3000/getAllTagsFromCredentialTagGroups
+{
+    "idCredential": 1,
+    "idSession": "e00e"
+}
+//-----------OUTPUT----------------
+{
+    "activeSession": true,
+    "tags": [
+        {
+            "idTagGroup": 7,
+            "idCredential": 1,
+            "tag": "POWA2"
+			"selected": true
+        },
+        {
+            "idTagGroup": 8,
+            "idCredential": 1,
+            "tag": "POWA4"
+			"selected": false
+        }
+    ]
+}
+
+
 
 http://localhost:3000/getAllAvatars
 {

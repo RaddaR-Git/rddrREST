@@ -2373,6 +2373,87 @@ app.post('/getAllTagsFromCredentialTagGroup', function (req, res) {
 });
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="getAllTagsFromCredentialTagGroups">
+app.post('/getAllTagsFromCredentialTagGroups', function (req, res) {
+    var requestID = new Date().getTime();
+    var response = {};
+    var dataPacket = {
+        requestID: requestID,
+        connectionParameters: connectionParameters1,
+        looked: 0
+    };
+    mn.init(dataPacket)
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[START]:[/getAllTagsFromCredentialTagGroups]');
+                return dp;
+            })
+            .then(function (dp) {
+                inputValidation(response, req.body, [
+                    new FieldValidation('idCredential', ENC.NUMBER()),
+                    new FieldValidation('idSession', ENC.STRING())
+                ]);
+                dp.idCredential = req.body.idCredential;
+                dp.idSession = mcph.decrypt(req.body.idSession, versusKey);
+                dp.idSessionEncoded = req.body.idSession;
+                if (!ENC.isStringValidNumber(dp.idSession)) {
+                    throw new Error("No es una Sesion Valida.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dataPacket.query = "SELECT * FROM enc_rdr_session WHERE id_session=" + dp.idSession + " AND id_credential=" + dp.idCredential;
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                if (dp.queryResult.hasRows()) {
+                    var firstrow = dp.queryResult.getFisrtRow();
+                    if (firstrow.activity === 1) {
+                        response.activeSession = true;
+                    } else {
+                        throw new Error("Su sesion ha caducado.");
+                    }
+
+                } else {
+                    throw new Error("Su sesion no existe o ha caducado.");
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                dp.query = "SELECT * FROM enc_rdr_tags WHERE id_credential=" + dp.idCredential;
+                dp.looked = 1;
+                return dp;
+            })
+            .then(mms.selectPromise)
+            .then(function (dp) {
+                var rows = dp.queryResult.rows;
+                var currentRow;
+                response.tags = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    currentRow = rows[i];
+                    response.tags.push(
+                            {
+                                idTagGroup: currentRow.id_tag_group,
+                                idCredential: currentRow.id_credential,
+                                tag: currentRow.tag,
+                                selected: currentRow.selected
+                            }
+                    );
+                }
+                return dp;
+            })
+            .then(function (dp) {
+                mc.info('RID:[' + requestID + ']-[REQUEST]-[END]:[/getAllTagsFromCredentialTagGroups]');
+                res.json(response);
+            })
+            .catch(function (err) {
+                mc.error('RID:[' + requestID + ']-[REQUEST]-[ERROR]:[' + err.message + ']:[/getAllTagsFromCredentialTagGroups]');
+                response.error = err.message;
+                res.json(response);
+            });
+});
+//</editor-fold>
+
 
 //<editor-fold defaultstate="collapsed" desc="getAllAvatars">
 app.post('/getAllAvatars', function (req, res) {
